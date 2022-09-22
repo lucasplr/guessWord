@@ -1,0 +1,35 @@
+.game h1{
+    font-size: 3em;
+    padding: 15px;
+}
+
+.points span{
+    font-weight: bold;
+    color: black;
+}
+
+.tip span{
+    color: green;
+}
+
+.wordContainer{
+    margin: 2em;
+    padding: 1.5em;
+    border: 15px solid darkred;
+    display: flex;
+}
+
+.letterContainer input{
+    height: 50px;
+    width: 50px;
+}
+
+.letter, .blankSquare{
+    font-size: 70px;
+    line-height: 1.5;
+    border: 3px solid black;
+    height: 100px;
+    width: 100px;
+    text-transform: uppercase;
+    font-weight: bold;
+}

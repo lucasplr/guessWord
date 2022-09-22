@@ -1,0 +1,10 @@
+.start h1{
+    font-size: 3.5em;
+    margin: 25px 0;
+    padding: 5px;
+}
+
+p{
+    margin: 15px;
+    color: #4caf6b;
+}
