@@ -1,6 +1,6 @@
 
 import './App.css';
-import {useState, useEffect} from 'react'
+import {useState, useEffect, useCallback} from 'react'
 import Start from './components/Start';
 import End from './components/End';
 import Game from './components/Game';
@@ -17,7 +17,10 @@ const qtd = 3
 
 function App() {
 
+
   const [gameStage, setGameStage] = useState(stages[0].name)
+
+  console.log(gameStage)
 
   const [words] = useState(wordsList)
 
@@ -30,12 +33,9 @@ function App() {
   const [guesses, setGuesses] = useState(3)
   const [score, setScore] = useState(0)
 
-  const clearLetters = () => {
-    setGuessedLetters([])
-    setWrongLetters([])
-  }
 
-  const pickCategoryAndWord = () => {
+
+  const pickCategoryAndWord = useCallback(() => {
     const categories = Object.keys(words) //extrais as keys do objeto
     const category = categories[Math.floor(Math.random() * Object.keys(categories).length)]
     
@@ -46,23 +46,24 @@ function App() {
     wordLetters = wordLetters.map((l) => l.toLowerCase())
 
     return {word, category, wordLetters}
-  }
+  }, [words])
   pickCategoryAndWord()
 
-  const gameStart = () => {
+  const gameStart = useCallback(() => {
+
+    clearLetters()
 
     const {word, category, wordLetters} = pickCategoryAndWord()
 
-    clearLetters()
+
 
     setPickedWord(word)
     setPickedCategory(category)
     setLetters(wordLetters)
 
 
-
     setGameStage(stages[1].name)
-  }
+  }, [pickCategoryAndWord])
 
   const verifyWord = (letter) => {
 
@@ -88,6 +89,11 @@ function App() {
 
   }
 
+  const clearLetters = () => {
+    setGuessedLetters([])
+    setWrongLetters([])
+  }
+
   useEffect(() => { //useEffect monitora para reagir conforme necessário
 
     if(guesses <= 0){
@@ -96,6 +102,20 @@ function App() {
     }
   }, [guesses])
 
+
+  useEffect(() => {
+
+    const uniqueLetters = [...new Set(letters)]
+
+    if(guessedLetters.length === uniqueLetters.length){
+      setScore((actualScore) => actualScore += 100)
+
+      gameStart()
+    }
+
+
+  }, [guessedLetters, letters, gameStart])
+
   const retry = () => {
     setScore(0)
     setGuesses(qtd)
@@ -103,8 +123,7 @@ function App() {
     setGameStage(stages[0].name)
   }
 
-
-
+  console.log(gameStage)
 
   return (
     <div className="App">
